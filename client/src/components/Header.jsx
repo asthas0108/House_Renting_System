@@ -2,7 +2,7 @@ import React from 'react';
 import {FaSearch} from "react-icons/fa";
 import {Link} from "react-router-dom";
 
-const Header = () => {
+export default function Header () {
   return (
     <header className='bg-slate-100 shadow-md'>
         <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
@@ -29,5 +29,3 @@ const Header = () => {
     </header>
   )
 }
-
-export default Header;
