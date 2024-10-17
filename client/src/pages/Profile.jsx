@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from '../firebase';
 import { useDispatch } from 'react-redux';
-import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess } from "../redux/user/userSlice.js"
+import { updateUserStart, updateUserFailure, updateUserSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserFailure, signOutUserStart, signOutUserSuccess  } from "../redux/user/userSlice.js"
 
 export default function Profile () {
 
@@ -112,13 +112,29 @@ export default function Profile () {
 
   };
 
+
+  const handleSignOut = async () => {
+    try{
+      dispatch(signOutUserStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if(data.success === false){
+        dispatch(signOutUserFailure(data.message));
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+    }catch(err){
+      dispatch(signOutUserFailure(data.message));
+    }
+  }
+
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input onChange={(e) => setFile(e.target.files[0])} type='file' ref={fileRef}/>
 
-        <img onClick={() => fileRef.current.click()} src={ formData.avatar || currentUser.avatar } alt='profile image' className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2'/>
+        <img onClick={() => fileRef.current.click()} src={ formData.avatar || (currentUser.avatar ? currentUser.avatar : "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F862298659890870728%2F&psig=AOvVaw31sw8qjyHzpfCrONFudsaS&ust=1729241929928000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMjL442GlYkDFQAAAAAdAAAAABAE") } alt='profile image' className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2'/>
 
         <p className='text-sm self-center'>
           {fileUploadError ?
@@ -168,7 +184,7 @@ export default function Profile () {
 
       <div className='flex justify-between mt-5'>
         <span className='text-red-700 cursor-pointer' onClick={handleDeleteUser}>Delete Account</span>
-        <span className='text-red-700 cursor-pointer'>Sign Out</span>
+        <span className='text-red-700 cursor-pointer' onClick={handleSignOut}>Sign Out</span>
       </div>
 
 
