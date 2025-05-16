@@ -239,6 +239,6 @@ Pull requests are welcome! For major changes, open an issue first to discuss wha
 
 For any queries or feedback, reach out to:
 
-**Your Name**  
+**ASTHA SINGH**  
 📧 asthas418@gmail.com 
 
